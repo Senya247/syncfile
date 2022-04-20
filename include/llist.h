@@ -1,6 +1,7 @@
 #ifndef LLIST_H
 #define LLIST_H
 
+#include "helper.h"
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,25 +71,9 @@ static void print_times(int c, int times)
 
 static struct node* print_list(struct node* head)
 {
-    // if (head->data.st.st_ino == head->next.data.st.st_ino) return
-    // &(head->next);
     struct node* traverse = head;
     int count = 0;
     while (traverse->next) {
-        /*
-        if (traverse->next->data.st.st_ino == head->data.st.st_ino) {
-            printf("%s=%s\n", traverse->next->data.filename,
-                   head->data.filename);
-            return traverse;
-        }
-        printf("%s\n", traverse->data.filename);
-        if (S_ISDIR(traverse->data.st.st_mode)) {
-            printf("in dir\n");
-            print_list(traverse);
-        }
-
-        if (count == 10) exit(0);
-        */
 
         printf("%s\n", traverse->data.filename);
         traverse = traverse->next;
@@ -133,6 +118,13 @@ static int fill_list(struct node** head, const char* dirname)
         // Don't add entries for parent dir and current fir
         if (!strcmp(de->d_name, ".") || !strcmp(de->d_name, ".."))
             continue;
+
+        struct node* new_node = create_node();
+        strncpy(new_node->data.filename, de->d_name, NAME_MAX);
+        stat(de->d_name, &(new_node->data.st));
+
+        add_list(head, new_node);
+        numfiles++;
     }
     // Not closing causes mem leak, legit took 6 hours to fix
     closedir(dir);

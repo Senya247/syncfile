@@ -19,7 +19,7 @@
 
 #define BAR "-------------------------------------------------------------"
 #define PERMS S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH
-#define LOGFILE "/home/agastya/Desktop/syncfile_serv/log_synfiles.log"
+#define LOGFILE "/home/agastya/Desktop/syncfile/syncfile_serv/bin/log.log"
 #define MAX_IPV4_LEN 15
 #define PRINTF(format, ...) flog(format, ##__VA_ARGS__)
 

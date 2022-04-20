@@ -34,10 +34,23 @@ size_t client_requires_mc; /* client requires metadata count. number of
 size_t server_files_mc; /*Number of files server has*/
 size_t server_requires_mc; /*Number of files server needs*/
 
+static struct node* pr_list(struct node* head)
+{
+    struct node* traverse = head;
+    int count = 0;
+    while (traverse->next) {
+
+        flog("%s\n", traverse->data.filename);
+        traverse = traverse->next;
+        count++;
+    }
+    return head;
+}
+
 int main(int argc, char* argv[])
 {
     // chdir("/home/agastya/Pictures/Wallpapers");
-    chdir("/home/agastya/Pictures/Wallpapers/");
+    chdir("/home/agastya/Pictures/Art/");
     set_logfile(LOGFILE);
 
     // Setting timeout for send and recv
@@ -74,7 +87,6 @@ int main(int argc, char* argv[])
                              // send. function prints whats common and whats
                              // not stores length of metadata in
                              // client_requires_mc
-
     // tell client how many files it needs and sending
     flog("(STATUS) Client needs %ld files\n\n", client_requires_mc);
     send_header_len(
@@ -98,6 +110,7 @@ int main(int argc, char* argv[])
 
     // Client now sends headers and files that server needs
     recv_header_len(0, &server_requires_mc);
+    flog("(STATUS) Client sending %d files\n", server_requires_mc);
     result = recv_headers_and_files(0, server_requires_mc, &server_requires_m);
     if (result) {
         flog("(ERROR) Error in receiving %s\n", result->data.filename);
@@ -113,4 +126,3 @@ finish:
     flog("(STATUS) Finished dealing with %s\n\n\n", peer_ipv4);
     close(logfd);
 }
-

@@ -231,7 +231,6 @@ size_t compute_differences(char* dirname, struct node* metadata,
     while (de == readdir(dir)) {
         if (!strcmp(de->d_name, ".") || !strcmp(de->d_name, ".."))
             continue;
-
         if (exists(de->d_name, metadata)) {
             flog("(INFO) Common %s\n", de->d_name);
         } else {
